@@ -2,12 +2,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { use, useEffect, useState } from "react";
 import io from "socket.io-client";
 
 export default function Home() {
+    const params = useParams(); // ✅ Correct way to access params
+    const id = params?.id; // Extract user ID
+
     const [_socket, setSocket] = useState<any>(null);
     const [messages, setMessages] = useState<any>([]);
+
 
     useEffect(() => {
         const initializeSocket = async () => {
@@ -21,7 +26,7 @@ export default function Home() {
             socketInstance.on("connect", () => {
                 console.log("✅ Connected:", socketInstance.id);
 
-                socketInstance.emit("register-user", '1');
+                socketInstance.emit("register-user", id);
             });
 
             socketInstance.on("private-message", ({ from, message }) => {
