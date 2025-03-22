@@ -4,11 +4,9 @@ import React, { useEffect, useState } from 'react';
 import { io, Socket } from "socket.io-client";
 
 export const socket = (() => {
-  const socketHost = undefined;
-  const path = '/api/socket/init-server';
-  if (typeof window == "undefined") return io(socketHost, { path });
+  if (typeof window == "undefined") return io();
   if (!(window as any)._socket) {
-    (window as any)._socket = io(socketHost, { path });
+    (window as any)._socket = io();
   }
   return (window as any)._socket as Socket;
 })();
@@ -22,7 +20,6 @@ export default function Page() {
     created_at: string;
     status: "READ" | "UNREAD";
   }[]>([]);
-  const apps: Record<string, any> = { "E-Office": 2, "E-Procurement": 3 };
 
 
 
@@ -40,7 +37,7 @@ export default function Page() {
    * Use effect
    */
   useEffect(() => {
-    fetch('/api/socket/init-server');
+    // fetch('/api/socket/init-server');
     socket.on("s_SendNotif", onSendNotif);
 
     return () => {
